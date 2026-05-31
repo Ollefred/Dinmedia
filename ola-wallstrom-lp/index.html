@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ola Wallström – Coaching för bolagsägare</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -816,6 +817,30 @@
   </div>
 </section>
 
+<!-- ─── VIDEO ─── -->
+<section class="section" style="background: var(--light); padding: 64px 24px;">
+  <div class="inner-sm" style="text-align: center;">
+    <p class="eyebrow">Se Ola berätta</p>
+    <h2 style="margin-bottom: 32px;">Vad det handlar om –<br>med egna ord.</h2>
+    <div style="position: relative; border-radius: 16px; overflow: hidden; background: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.18);">
+      <video id="ola-video" controls playsinline style="width: 100%; display: block; max-height: 480px; object-fit: cover;"></video>
+    </div>
+  </div>
+</section>
+<script>
+  (function() {
+    var video = document.getElementById('ola-video');
+    var src = 'https://olawallstrom.com/media-bank-hls/c87f9d0a-74c9-44d1-9873-7493023a4851-2000-1.m3u8/c87f9d0a-74c9-44d1-9873-7493023a4851?signature=bcc2ebb5e58f20cd9f5fc509421267c842e931a5b50541c5cd1145f3ca6500ac';
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src;
+    } else if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+    }
+  })();
+</script>
+
 <!-- ─── PAIN ─── -->
 <section class="section pain">
   <div class="inner">
@@ -1123,8 +1148,7 @@
   <div class="inner">
     <div class="about-inner">
       <div class="about-photo">
-        <!-- Ersätt med: <img src="ola.jpg" alt="Ola Wallström"> -->
-        Foto på Ola Wallström
+        <img src="ola.jpg" alt="Ola Wallström">
       </div>
       <div class="about-text">
         <p class="eyebrow">Om Ola Wallström</p>
@@ -1222,6 +1246,157 @@
   </div>
   <a href="#boka" class="sticky-btn">Boka kostnadsfritt samtal</a>
 </div>
+
+<!-- ─── POPUP MODAL ─── -->
+<div id="popup-overlay" style="
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; transition: opacity 0.4s ease;
+  pointer-events: none;
+">
+  <div id="popup-box" style="
+    background: #fff;
+    border-radius: 20px;
+    max-width: 480px; width: 100%;
+    padding: 48px 44px 44px;
+    position: relative;
+    transform: translateY(24px);
+    transition: transform 0.4s ease;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.25);
+  ">
+    <!-- Close -->
+    <button onclick="closePopup()" style="
+      position: absolute; top: 18px; right: 20px;
+      background: none; border: none; cursor: pointer;
+      color: #9ca3af; font-size: 22px; line-height: 1;
+      padding: 4px 8px;
+    " aria-label="Stäng">✕</button>
+
+    <!-- Badge -->
+    <div style="
+      display: inline-flex; align-items: center; gap: 7px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.35);
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 20px;
+    ">
+      <span style="width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
+      Begränsade platser · Höst 2025
+    </div>
+
+    <h2 style="font-size: 26px; font-weight: 700; line-height: 1.2; margin-bottom: 10px;">
+      Boka ett kostnadsfritt<br>strategisamtal med Ola
+    </h2>
+    <p style="
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px; color: #6b7280;
+      margin-bottom: 28px; line-height: 1.65;
+    ">
+      30 minuter. Du får konkreta insikter om ditt bolag – oavsett om vi arbetar tillsammans eller inte.
+    </p>
+
+    <form id="popup-form" onsubmit="handlePopupSubmit(event)" style="display:flex; flex-direction:column; gap:14px;">
+      <input type="text" name="name" placeholder="Ditt namn" required style="
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 15px; padding: 14px 16px;
+        border: 1.5px solid #e5e1d8; border-radius: 8px;
+        outline: none; transition: border-color 0.2s;
+        width: 100%;
+      " onfocus="this.style.borderColor='#c8a96e'" onblur="this.style.borderColor='#e5e1d8'">
+
+      <input type="email" name="email" placeholder="Din e-post" required style="
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 15px; padding: 14px 16px;
+        border: 1.5px solid #e5e1d8; border-radius: 8px;
+        outline: none; transition: border-color 0.2s;
+        width: 100%;
+      " onfocus="this.style.borderColor='#c8a96e'" onblur="this.style.borderColor='#e5e1d8'">
+
+      <input type="tel" name="phone" placeholder="Ditt mobilnummer" required style="
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 15px; padding: 14px 16px;
+        border: 1.5px solid #e5e1d8; border-radius: 8px;
+        outline: none; transition: border-color 0.2s;
+        width: 100%;
+      " onfocus="this.style.borderColor='#c8a96e'" onblur="this.style.borderColor='#e5e1d8'">
+
+      <button type="submit" style="
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 16px; font-weight: 700;
+        background: var(--accent); color: #0a0a0a;
+        border: none; border-radius: 8px;
+        padding: 17px; cursor: pointer;
+        transition: background 0.2s, transform 0.15s;
+        margin-top: 4px;
+      " onmouseover="this.style.background='#e8c98e'" onmouseout="this.style.background='#c8a96e'">
+        Skicka – boka mitt samtal
+      </button>
+    </form>
+
+    <!-- Success state (hidden) -->
+    <div id="popup-success" style="display:none; text-align:center; padding: 16px 0;">
+      <div style="font-size: 40px; margin-bottom: 16px;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Tack – vi hör av oss!</h3>
+      <p style="font-family: 'Segoe UI', system-ui, sans-serif; color: #6b7280; font-size: 15px; line-height: 1.65;">
+        Ola eller hans team kontaktar dig inom kort för att boka in en tid.
+      </p>
+    </div>
+
+    <p style="
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 12px; color: #9ca3af;
+      text-align: center; margin-top: 16px;
+    ">Ingen spam. Dina uppgifter delas aldrig med tredje part.</p>
+  </div>
+</div>
+
+<script>
+  // Show popup after 1.2s
+  setTimeout(function() {
+    var overlay = document.getElementById('popup-overlay');
+    var box = document.getElementById('popup-box');
+    overlay.style.opacity = '1';
+    overlay.style.pointerEvents = 'auto';
+    box.style.transform = 'translateY(0)';
+  }, 1200);
+
+  // Close on overlay click
+  document.getElementById('popup-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePopup();
+  });
+
+  function closePopup() {
+    var overlay = document.getElementById('popup-overlay');
+    var box = document.getElementById('popup-box');
+    overlay.style.opacity = '0';
+    box.style.transform = 'translateY(24px)';
+    setTimeout(function() { overlay.style.pointerEvents = 'none'; }, 400);
+  }
+
+  function handlePopupSubmit(e) {
+    e.preventDefault();
+    // Here: send to your CRM / email / Calendly
+    document.getElementById('popup-form').style.display = 'none';
+    document.getElementById('popup-success').style.display = 'block';
+    setTimeout(function() {
+      closePopup();
+      window.location.href = 'https://calendly.com/ola-olawallstrom';
+    }, 2500);
+  }
+</script>
 
 </body>
 </html>
